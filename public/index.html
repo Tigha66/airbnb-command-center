@@ -11,10 +11,47 @@
     .glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
     .gradient-text{background:linear-gradient(135deg,#ff5a5f,#ff385c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+    .speaking{animation:pulse 1s infinite;box-shadow:0 0 20px #10b981}
+    .listening{animation:pulse 0.5s infinite;box-shadow:0 0 20px #f59e0b}
   </style>
 </head>
 <body class="bg-[#0a0a0f] min-h-screen text-white">
   
+  <!-- VOICE SUPPORT WIDGET -->
+  <div id="voiceWidget" class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleVoiceSupport()" class="w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-lg hover:scale-110 transition transform">
+      <i class="fas fa-phone text-2xl"></i>
+    </button>
+  </div>
+
+  <!-- VOICE SUPPORT PANEL -->
+  <div id="voicePanel" class="fixed bottom-24 right-6 w-96 glass rounded-2xl p-6 hidden z-50">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-bold flex items-center gap-2"><i class="fas fa-headset text-green-400"></i> Voice Support</h3>
+      <button onclick="toggleVoiceSupport()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div id="voiceStatus" class="text-center py-4">
+      <div id="voiceIcon" class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-microphone text-3xl text-green-400"></i>
+      </div>
+      <p id="voiceText" class="text-slate-400">Click to call support</p>
+    </div>
+
+    <div id="callControls" class="space-y-3">
+      <button onclick="startVoiceCall()" class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-semibold flex items-center justify-center gap-2">
+        <i class="fas fa-phone"></i> Start Voice Call
+      </button>
+      <button onclick="endCall()" class="w-full py-3 bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center gap-2">
+        <i class="fas fa-phone-slash"></i> End Call
+      </button>
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-white/10">
+      <p class="text-xs text-slate-500">Voice AI powered by ElevenLabs</p>
+    </div>
+  </div>
+
   <!-- LOGIN VIEW -->
   <div id="loginView" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
@@ -41,19 +78,16 @@
           <div class="glass rounded-xl p-4 text-center">
             <p class="font-bold text-sm">Starter</p>
             <p class="text-xl font-bold text-slate-400">$49</p>
-            <p class="text-xs text-slate-500 mt-1">3 properties</p>
             <button onclick="subscribe('starter')" class="w-full mt-3 py-2 bg-slate-600 rounded-lg text-xs">Select</button>
           </div>
           <div class="glass rounded-xl p-4 text-center border border-red-500/50">
             <p class="font-bold text-sm">Growth</p>
             <p class="text-xl font-bold text-red-400">$99</p>
-            <p class="text-xs text-slate-500 mt-1">10 properties</p>
             <button onclick="subscribe('growth')" class="w-full mt-3 py-2 bg-red-500 rounded-lg text-xs">Select</button>
           </div>
           <div class="glass rounded-xl p-4 text-center border border-purple-500/50">
             <p class="font-bold text-sm">Enterprise</p>
             <p class="text-xl font-bold text-purple-400">$249</p>
-            <p class="text-xs text-slate-500 mt-1">Unlimited</p>
             <button onclick="subscribe('enterprise')" class="w-full mt-3 py-2 bg-purple-500 rounded-lg text-xs">Select</button>
           </div>
         </div>
@@ -63,8 +97,7 @@
 
   <!-- DASHBOARD VIEW -->
   <div id="dashboardView" class="hidden">
-    <!-- Header -->
-    <header class="glass sticky top-0 z-50">
+    <header class="glass sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
@@ -84,7 +117,6 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
-      <!-- Stats -->
       <div class="grid grid-cols-5 gap-4 mb-8">
         <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Properties</p><p class="text-3xl font-bold" id="totalProperties">12</p></div>
         <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Active Bookings</p><p class="text-3xl font-bold text-green-400" id="activeBookings">8</p></div>
@@ -94,19 +126,16 @@
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
-        <!-- Bookings -->
         <div class="glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-calendar-check text-red-400"></i> Upcoming Check-ins</h2>
           <div id="bookingsList" class="space-y-3"></div>
         </div>
 
-        <!-- Automation Tasks -->
         <div class="glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-robot text-purple-400"></i> Automation Queue</h2>
           <div id="automationQueue" class="space-y-3"></div>
         </div>
 
-        <!-- Quick Actions -->
         <div class="glass rounded-2xl p-6">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-yellow-400"></i> Quick Actions</h2>
           <div class="grid grid-cols-2 gap-3">
@@ -130,7 +159,6 @@
         </div>
       </div>
 
-      <!-- Properties Table -->
       <div class="glass rounded-2xl p-6 mt-8">
         <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-building text-indigo-400"></i> Properties</h2>
         <div class="overflow-x-auto">
@@ -161,22 +189,10 @@
         <button onclick="closeModal('addProperty')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
       </div>
       <form id="addPropertyForm" class="space-y-4">
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Property Name</label>
-          <input type="text" id="propName" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
-        </div>
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Location</label>
-          <input type="text" id="propLocation" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
-        </div>
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Base Price ($/night)</label>
-          <input type="number" id="propPrice" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
-        </div>
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Bedrooms</label>
-          <input type="number" id="propBedrooms" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
-        </div>
+        <input type="text" id="propName" placeholder="Property Name" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
+        <input type="text" id="propLocation" placeholder="Location" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
+        <input type="number" id="propPrice" placeholder="Base Price ($/night)" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
+        <input type="number" id="propBedrooms" placeholder="Bedrooms" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
         <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold">Add Property</button>
       </form>
     </div>
@@ -189,23 +205,11 @@
         <button onclick="closeModal('newBooking')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
       </div>
       <form id="newBookingForm" class="space-y-4">
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Guest Name</label>
-          <input type="text" id="guestName" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
-        </div>
-        <div>
-          <label class="block text-slate-400 text-sm mb-2">Property</label>
-          <select id="bookingProperty" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white"></select>
-        </div>
+        <input type="text" id="guestName" placeholder="Guest Name" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500">
+        <select id="bookingProperty" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white"></select>
         <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-slate-400 text-sm mb-2">Check-in</label>
-            <input type="date" id="checkIn" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white">
-          </div>
-          <div>
-            <label class="block text-slate-400 text-sm mb-2">Check-out</label>
-            <input type="date" id="checkOut" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white">
-          </div>
+          <input type="date" id="checkIn" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white">
+          <input type="date" id="checkOut" required class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white">
         </div>
         <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold">Create Booking</button>
       </form>
@@ -221,22 +225,135 @@
       <div class="space-y-4">
         <div class="bg-white/5 rounded-xl p-4 border border-red-500/50">
           <div class="flex justify-between items-center">
-            <div>
-              <p class="font-bold">Pro Plan</p>
-              <p class="text-slate-400 text-sm">Unlimited properties</p>
-            </div>
+            <div><p class="font-bold">Pro Plan</p><p class="text-slate-400 text-sm">Unlimited properties</p></div>
             <p class="text-2xl font-bold text-red-400">$99/mo</p>
           </div>
         </div>
-        <button onclick="processStripePayment()" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold">
-          <i class="fas fa-credit-card mr-2"></i> Pay with Stripe
-        </button>
+        <button onclick="processStripePayment()" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold"><i class="fas fa-credit-card mr-2"></i> Pay with Stripe</button>
         <p class="text-center text-slate-500 text-xs">Secured by Stripe</p>
       </div>
     </div>
   </div>
 
   <script>
+    // Voice Support System
+    let isCallActive = false;
+    let recognition = null;
+    let synthesis = window.speechSynthesis;
+    let voiceEnabled = true;
+
+    // Support responses
+    const supportResponses = {
+      'checkin': "Your check-in time is 3 PM. The address will be sent 24 hours before arrival.",
+      'checkout': "Checkout is at 11 AM. Please leave the keys in the lockbox.",
+      'wifi': "The WiFi password is printed on the welcome card in the kitchen.",
+      'password': "The WiFi password is printed on the welcome card in the kitchen.",
+      'parking': "Free parking is available on the property. The gate code is 1234.",
+      'pool': "The pool is available from 6 AM to 10 PM. Towels are in the hallway closet.",
+      'ac': "The air conditioning is controlled by the thermostat on the wall. Set it to your preferred temperature.",
+      'heating': "The heating is controlled by the thermostat. It's set to 72 degrees by default.",
+      'lock': "If you're locked out, call this number and we'll send someone right away.",
+      'key': "The key is in the smart lock. Use the code I sent you, or the physical key is under the mat.",
+      'problem': "I'm sorry you're experiencing an issue. Let me alert the property manager right away.",
+      'emergency': "For emergencies, please dial 911. For non-emergency support, I'm here to help.",
+      'help': "I can help with check-in, checkout, WiFi, parking, pool access, and more. What do you need?",
+      'thank': "You're welcome! Is there anything else I can help you with?",
+      'bye': "Thank you for calling! Have a wonderful stay!",
+    };
+
+    function toggleVoiceSupport() {
+      const panel = document.getElementById('voicePanel');
+      panel.classList.toggle('hidden');
+    }
+
+    function startVoiceCall() {
+      isCallActive = true;
+      document.getElementById('voiceIcon').classList.add('speaking');
+      document.getElementById('voiceIcon').innerHTML = '<i class="fas fa-microphone text-3xl text-green-400"></i>';
+      document.getElementById('voiceText').textContent = 'Listening...';
+      
+      // Welcome message
+      speak("Hello! Welcome to AirBnB support. I'm your AI assistant. How can I help you today?");
+      
+      // Start speech recognition
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        
+        recognition.onresult = function(event) {
+          const transcript = Array.from(event.results)
+            .map(result => result[0])
+            .join('');
+          
+          if (event.results[0].isFinal) {
+            handleVoiceInput(transcript.toLowerCase());
+          }
+        };
+        
+        recognition.onerror = function(event) {
+          console.log('Speech recognition error:', event.error);
+        };
+        
+        recognition.start();
+      } else {
+        alert("Voice recognition not supported in this browser. Try Chrome!");
+      }
+    }
+
+    function handleVoiceInput(input) {
+      console.log('Voice input:', input);
+      
+      // Find matching response
+      let response = "I'm not sure I understood. Can you try again?";
+      
+      for (const [key, value] of Object.entries(supportResponses)) {
+        if (input.includes(key)) {
+          response = value;
+          break;
+        }
+      }
+      
+      speak(response);
+    }
+
+    function speak(text) {
+      // Cancel any current speech
+      synthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      
+      // Try to get a good voice
+      const voices = synthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang.startsWith('en'));
+      if (englishVoice) utterance.voice = englishVoice;
+      
+      utterance.onend = function() {
+        if (isCallActive && recognition) {
+          // Keep listening
+        }
+      };
+      
+      synthesis.speak(utterance);
+    }
+
+    function endCall() {
+      isCallActive = false;
+      synthesis.cancel();
+      if (recognition) {
+        recognition.stop();
+        recognition = null;
+      }
+      document.getElementById('voiceIcon').classList.remove('speaking');
+      document.getElementById('voiceIcon').innerHTML = '<i class="fas fa-microphone text-3xl text-green-400"></i>';
+      document.getElementById('voiceText').textContent = 'Click to call support';
+      speak("Thank you for calling! Have a great day!");
+    }
+
     // Data storage
     let properties = [
       { id: 1, name: 'Villa Sunset', location: 'Miami Beach, FL', price: 250, bookings: 12, revenue: 18500, occupancy: 92, rating: 4.9, status: 'active', bedrooms: 3 },
@@ -249,11 +366,11 @@
       { id: 2, guest: 'Sarah Miller', propertyId: 2, checkIn: '2026-03-20', checkOut: '2026-03-25', total: 1200, status: 'pending' },
     ];
 
-    // Check login state on load
+    // Check login
     document.addEventListener('DOMContentLoaded', function() {
-      if (localStorage.getItem('isLoggedIn') === 'true') {
-        showDashboard();
-      }
+      if (localStorage.getItem('isLoggedIn') === 'true') showDashboard();
+      // Pre-load voices
+      speechSynthesis.getVoices();
     });
 
     function showDashboard() {
@@ -270,7 +387,6 @@
       document.getElementById('loginView').classList.remove('hidden');
     }
 
-    // Login form
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       localStorage.setItem('isLoggedIn', 'true');
@@ -278,8 +394,7 @@
     });
 
     function renderProperties() {
-      const tbody = document.getElementById('propertiesList');
-      tbody.innerHTML = properties.map(p => `
+      document.getElementById('propertiesList').innerHTML = properties.map(p => `
         <tr class="border-b border-white/5">
           <td class="py-3"><p class="font-medium">${p.name}</p><p class="text-slate-400 text-xs">${p.location}</p></td>
           <td>${p.bookings}</td>
@@ -287,17 +402,15 @@
           <td><span class="${p.occupancy >= 80 ? 'text-green-400' : 'text-yellow-400'}">${p.occupancy}%</span></td>
           <td>${p.rating}★</td>
           <td><span class="px-2 py-1 rounded text-xs ${p.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${p.status}</span></td>
-          <td><button onclick="deleteProperty(${p.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>
+          <td><button onclick="deleteProperty(${p.id})" class="text-red-400"><i class="fas fa-trash"></i></button></td>
         </tr>
       `).join('');
       document.getElementById('totalProperties').textContent = properties.length;
-      const select = document.getElementById('bookingProperty');
-      select.innerHTML = properties.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      document.getElementById('bookingProperty').innerHTML = properties.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
     }
 
     function renderBookings() {
-      const container = document.getElementById('bookingsList');
-      container.innerHTML = bookings.map(b => {
+      document.getElementById('bookingsList').innerHTML = bookings.map(b => {
         const prop = properties.find(p => p.id === b.propertyId);
         const initials = b.guest.split(' ').map(n => n[0]).join('');
         return `
@@ -305,7 +418,7 @@
             <div class="flex items-center justify-between mb-2">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold">${initials}</div>
-                <div><p class="font-medium">${b.guest}</p><p class="text-slate-400 text-xs">${prop?.name || 'Unknown'} • $${b.total}</p></div>
+                <div><p class="font-medium">${b.guest}</p><p class="text-slate-400 text-xs">${prop?.name} • $${b.total}</p></div>
               </div>
               <span class="px-2 py-1 rounded text-xs ${b.status === 'confirmed' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${b.status}</span>
             </div>
@@ -317,14 +430,13 @@
     }
 
     function renderAutomation() {
-      const container = document.getElementById('automationQueue');
       const tasks = [
         { icon: 'envelope', color: 'green', text: 'Welcome message sent', sub: 'to John Davis', status: 'done' },
         { icon: 'bell', color: 'yellow', text: 'Checkout reminder', sub: 'Scheduled for tomorrow', status: 'pending' },
         { icon: 'broom', color: 'blue', text: 'Cleaning scheduled', sub: 'Villa Sunset • Mar 18', status: 'done' },
         { icon: 'star', color: 'purple', text: 'Review request', sub: 'Sent to previous guest', status: 'done' },
       ];
-      container.innerHTML = tasks.map(t => `
+      document.getElementById('automationQueue').innerHTML = tasks.map(t => `
         <div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-${t.color}-500/20 flex items-center justify-center"><i class="fas fa-${t.icon} text-${t.color}-400 text-xs"></i></div>
           <div class="flex-1"><p class="text-sm">${t.text}</p><p class="text-slate-500 text-xs">${t.sub}</p></div>
@@ -356,7 +468,6 @@
       renderProperties();
       closeModal('addProperty');
       this.reset();
-      alert('Property added! 🎉');
     });
 
     document.getElementById('newBookingForm').addEventListener('submit', function(e) {
@@ -377,16 +488,11 @@
       this.reset();
     });
 
-    function updatePrices() {
-      properties.forEach(p => { p.price = Math.round(p.price * (1 + (Math.random() * 0.2 - 0.1))); });
-      renderProperties();
-      alert('Prices updated!');
-    }
-
+    function updatePrices() { properties.forEach(p => { p.price = Math.round(p.price * (1 + (Math.random() * 0.2 - 0.1))); }); renderProperties(); alert('Prices updated!'); }
     function syncCalendars() { alert('Syncing with AirBnB, Booking.com, VRBO...'); }
     function deleteProperty(id) { if(confirm('Delete property?')) { properties = properties.filter(p => p.id !== id); renderProperties(); } }
-    function subscribe(plan) { alert(plan.toUpperCase() + ' plan - $' + (plan==='starter'?49:plan==='growth'?99:249) + '/month\n\nAdd Stripe keys to enable!'); }
-    function processStripePayment() { alert('Stripe Checkout would open here!\n\nGet keys from stripe.com'); }
+    function subscribe(plan) { alert(plan.toUpperCase() + ' plan - $' + (plan==='starter'?49:plan==='growth'?99:249) + '/month\n\nAdd Stripe keys!'); }
+    function processStripePayment() { alert('Stripe Checkout\n\nGet keys from stripe.com'); }
   </script>
 </body>
 </html>
