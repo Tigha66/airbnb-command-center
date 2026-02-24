@@ -14,101 +14,146 @@
   </style>
 </head>
 <body class="bg-[#0a0a0f] min-h-screen text-white">
-  <!-- Header -->
-  <header class="glass sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
-          <i class="fas fa-home text-xl"></i>
+  
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-home text-3xl"></i>
         </div>
-        <div>
-          <h1 class="text-xl font-bold gradient-text">AirBnB Command Center</h1>
-          <p class="text-xs text-slate-400">Automated Property Management</p>
-        </div>
+        <h1 class="text-3xl font-bold text-white">AirBnB Command</h1>
+        <p class="text-slate-400 mt-2">Automated Property Management</p>
       </div>
-      <div class="flex items-center gap-4">
-        <span class="flex items-center gap-2 text-green-400 text-sm"><span class="w-2 h-2 bg-green-400 rounded-full pulse"></span> AI Active</span>
-        <button onclick="openModal('addProperty')" class="px-4 py-2 bg-red-500 rounded-xl font-medium"><i class="fas fa-plus mr-2"></i>Add Property</button>
+      
+      <div class="glass rounded-2xl p-8">
+        <form id="loginForm" class="space-y-4">
+          <input type="email" id="email" placeholder="Email" required class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-slate-500">
+          <input type="password" id="password" placeholder="Password" required class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-slate-500">
+          <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold">Sign In</button>
+        </form>
+        <p class="text-center text-slate-400 text-sm mt-4">Or <button onclick="showDashboard()" class="text-red-400 hover:underline">continue as guest</button></p>
       </div>
-    </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-6 py-8">
-    <!-- Stats -->
-    <div class="grid grid-cols-5 gap-4 mb-8">
-      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Properties</p><p class="text-3xl font-bold" id="totalProperties">12</p></div>
-      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Active Bookings</p><p class="text-3xl font-bold text-green-400" id="activeBookings">8</p></div>
-      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Revenue (Month)</p><p class="text-3xl font-bold" id="totalRevenue">$24,500</p></div>
-      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Reviews</p><p class="text-3xl font-bold text-yellow-400">4.9★</p></div>
-      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Occupancy</p><p class="text-3xl font-bold text-purple-400">87%</p></div>
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-8">
-      <!-- Bookings -->
-      <div class="glass rounded-2xl p-6">
-        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-calendar-check text-red-400"></i> Upcoming Check-ins</h2>
-        <div id="bookingsList" class="space-y-3">
-          <!-- Bookings will be rendered here -->
-        </div>
-      </div>
-
-      <!-- Automation Tasks -->
-      <div class="glass rounded-2xl p-6">
-        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-robot text-purple-400"></i> Automation Queue</h2>
-        <div id="automationQueue" class="space-y-3">
-          <!-- Automation tasks will be rendered here -->
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="glass rounded-2xl p-6">
-        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-yellow-400"></i> Quick Actions</h2>
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="openModal('newBooking')" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
-            <i class="fas fa-plus-circle text-green-400 mb-2"></i>
-            <p class="font-medium">New Booking</p>
-          </button>
-          <button onclick="openModal('messageAll')" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
-            <i class="fas fa-envelope-open text-blue-400 mb-2"></i>
-            <p class="font-medium">Message All</p>
-          </button>
-          <button onclick="updatePrices()" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
-            <i class="fas fa-dollar-sign text-yellow-400 mb-2"></i>
-            <p class="font-medium">Update Prices</p>
-          </button>
-          <button onclick="syncCalendars()" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
-            <i class="fas fa-sync text-purple-400 mb-2"></i>
-            <p class="font-medium">Sync Calendars</p>
-          </button>
+      
+      <div class="mt-8">
+        <h3 class="text-center text-slate-400 mb-4">Choose your plan</h3>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="glass rounded-xl p-4 text-center">
+            <p class="font-bold text-sm">Starter</p>
+            <p class="text-xl font-bold text-slate-400">$49</p>
+            <p class="text-xs text-slate-500 mt-1">3 properties</p>
+            <button onclick="subscribe('starter')" class="w-full mt-3 py-2 bg-slate-600 rounded-lg text-xs">Select</button>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-red-500/50">
+            <p class="font-bold text-sm">Growth</p>
+            <p class="text-xl font-bold text-red-400">$99</p>
+            <p class="text-xs text-slate-500 mt-1">10 properties</p>
+            <button onclick="subscribe('growth')" class="w-full mt-3 py-2 bg-red-500 rounded-lg text-xs">Select</button>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-purple-500/50">
+            <p class="font-bold text-sm">Enterprise</p>
+            <p class="text-xl font-bold text-purple-400">$249</p>
+            <p class="text-xs text-slate-500 mt-1">Unlimited</p>
+            <button onclick="subscribe('enterprise')" class="w-full mt-3 py-2 bg-purple-500 rounded-lg text-xs">Select</button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Properties Table -->
-    <div class="glass rounded-2xl p-6 mt-8">
-      <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-building text-indigo-400"></i> Properties</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full" id="propertiesTable">
-          <thead>
-            <tr class="text-left text-slate-400 text-sm border-b border-white/10">
-              <th class="pb-3">Property</th>
-              <th class="pb-3">Bookings</th>
-              <th class="pb-3">Revenue</th>
-              <th class="pb-3">Occupancy</th>
-              <th class="pb-3">Rating</th>
-              <th class="pb-3">Status</th>
-              <th class="pb-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="propertiesList">
-            <!-- Properties will be rendered here -->
-          </tbody>
-        </table>
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView" class="hidden">
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
+            <i class="fas fa-home text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold gradient-text">AirBnB Command Center</h1>
+            <p class="text-xs text-slate-400">Automated Property Management</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-2 text-green-400 text-sm"><span class="w-2 h-2 bg-green-400 rounded-full pulse"></span> AI Active</span>
+          <button onclick="openModal('addProperty')" class="px-4 py-2 bg-red-500 rounded-xl font-medium"><i class="fas fa-plus mr-2"></i>Add Property</button>
+          <button onclick="logout()" class="px-4 py-2 bg-white/10 rounded-xl font-medium"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
+        </div>
       </div>
-    </div>
-  </main>
+    </header>
 
-  <!-- Add Property Modal -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Stats -->
+      <div class="grid grid-cols-5 gap-4 mb-8">
+        <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Properties</p><p class="text-3xl font-bold" id="totalProperties">12</p></div>
+        <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Active Bookings</p><p class="text-3xl font-bold text-green-400" id="activeBookings">8</p></div>
+        <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Revenue (Month)</p><p class="text-3xl font-bold" id="totalRevenue">$24,500</p></div>
+        <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Reviews</p><p class="text-3xl font-bold text-yellow-400">4.9★</p></div>
+        <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Occupancy</p><p class="text-3xl font-bold text-purple-400">87%</p></div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Bookings -->
+        <div class="glass rounded-2xl p-6">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-calendar-check text-red-400"></i> Upcoming Check-ins</h2>
+          <div id="bookingsList" class="space-y-3"></div>
+        </div>
+
+        <!-- Automation Tasks -->
+        <div class="glass rounded-2xl p-6">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-robot text-purple-400"></i> Automation Queue</h2>
+          <div id="automationQueue" class="space-y-3"></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="glass rounded-2xl p-6">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-yellow-400"></i> Quick Actions</h2>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="openModal('newBooking')" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+              <i class="fas fa-plus-circle text-green-400 mb-2"></i>
+              <p class="font-medium">New Booking</p>
+            </button>
+            <button onclick="openModal('stripe')" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+              <i class="fas fa-credit-card text-red-400 mb-2"></i>
+              <p class="font-medium">Subscribe</p>
+            </button>
+            <button onclick="updatePrices()" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+              <i class="fas fa-dollar-sign text-yellow-400 mb-2"></i>
+              <p class="font-medium">Update Prices</p>
+            </button>
+            <button onclick="syncCalendars()" class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+              <i class="fas fa-sync text-purple-400 mb-2"></i>
+              <p class="font-medium">Sync Calendars</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Properties Table -->
+      <div class="glass rounded-2xl p-6 mt-8">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-building text-indigo-400"></i> Properties</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="text-left text-slate-400 text-sm border-b border-white/10">
+                <th class="pb-3">Property</th>
+                <th class="pb-3">Bookings</th>
+                <th class="pb-3">Revenue</th>
+                <th class="pb-3">Occupancy</th>
+                <th class="pb-3">Rating</th>
+                <th class="pb-3">Status</th>
+                <th class="pb-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="propertiesList"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODALS -->
   <div id="addPropertyModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
     <div class="glass rounded-2xl p-8 w-full max-w-md">
       <div class="flex justify-between items-center mb-6">
@@ -137,7 +182,6 @@
     </div>
   </div>
 
-  <!-- New Booking Modal -->
   <div id="newBookingModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
     <div class="glass rounded-2xl p-8 w-full max-w-md">
       <div class="flex justify-between items-center mb-6">
@@ -168,7 +212,6 @@
     </div>
   </div>
 
-  <!-- Stripe Payment Modal -->
   <div id="stripeModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
     <div class="glass rounded-2xl p-8 w-full max-w-md">
       <div class="flex justify-between items-center mb-6">
@@ -206,7 +249,34 @@
       { id: 2, guest: 'Sarah Miller', propertyId: 2, checkIn: '2026-03-20', checkOut: '2026-03-25', total: 1200, status: 'pending' },
     ];
 
-    // Render functions
+    // Check login state on load
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('isLoggedIn') === 'true') {
+        showDashboard();
+      }
+    });
+
+    function showDashboard() {
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.remove('hidden');
+      renderProperties();
+      renderBookings();
+      renderAutomation();
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('loginView').classList.remove('hidden');
+    }
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      localStorage.setItem('isLoggedIn', 'true');
+      showDashboard();
+    });
+
     function renderProperties() {
       const tbody = document.getElementById('propertiesList');
       tbody.innerHTML = properties.map(p => `
@@ -217,14 +287,10 @@
           <td><span class="${p.occupancy >= 80 ? 'text-green-400' : 'text-yellow-400'}">${p.occupancy}%</span></td>
           <td>${p.rating}★</td>
           <td><span class="px-2 py-1 rounded text-xs ${p.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${p.status}</span></td>
-          <td>
-            <button onclick="deleteProperty(${p.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button>
-          </td>
+          <td><button onclick="deleteProperty(${p.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>
         </tr>
       `).join('');
       document.getElementById('totalProperties').textContent = properties.length;
-      
-      // Update booking property dropdown
       const select = document.getElementById('bookingProperty');
       select.innerHTML = properties.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
     }
@@ -239,7 +305,7 @@
             <div class="flex items-center justify-between mb-2">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold">${initials}</div>
-                <div><p class="font-medium">${b.guest}</p><p class="text-slate-400 text-xs">${prop?.name || 'Unknown'} • ${b.total}</p></div>
+                <div><p class="font-medium">${b.guest}</p><p class="text-slate-400 text-xs">${prop?.name || 'Unknown'} • $${b.total}</p></div>
               </div>
               <span class="px-2 py-1 rounded text-xs ${b.status === 'confirmed' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">${b.status}</span>
             </div>
@@ -267,110 +333,60 @@
       `).join('');
     }
 
-    // Modal functions
     function openModal(type) {
-      if (type === 'addProperty') {
-        document.getElementById('addPropertyModal').classList.remove('hidden');
-        document.getElementById('addPropertyModal').classList.add('flex');
-      } else if (type === 'newBooking') {
-        document.getElementById('newBookingModal').classList.remove('hidden');
-        document.getElementById('newBookingModal').classList.add('flex');
-      } else if (type === 'stripe') {
-        document.getElementById('stripeModal').classList.remove('hidden');
-        document.getElementById('stripeModal').classList.add('flex');
-      }
+      document.getElementById(type + 'Modal').classList.remove('hidden');
+      document.getElementById(type + 'Modal').classList.add('flex');
     }
 
     function closeModal(type) {
-      if (type === 'addProperty') {
-        document.getElementById('addPropertyModal').classList.add('hidden');
-        document.getElementById('addPropertyModal').classList.remove('flex');
-      } else if (type === 'newBooking') {
-        document.getElementById('newBookingModal').classList.add('hidden');
-        document.getElementById('newBookingModal').classList.remove('flex');
-      } else if (type === 'stripe') {
-        document.getElementById('stripeModal').classList.add('hidden');
-        document.getElementById('stripeModal').classList.remove('flex');
-      }
+      document.getElementById(type + 'Modal').classList.add('hidden');
+      document.getElementById(type + 'Modal').classList.remove('flex');
     }
 
-    // Form submissions
     document.getElementById('addPropertyForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const newProp = {
+      properties.push({
         id: Date.now(),
         name: document.getElementById('propName').value,
         location: document.getElementById('propLocation').value,
         price: parseInt(document.getElementById('propPrice').value),
-        bookings: 0,
-        revenue: 0,
-        occupancy: 0,
-        rating: 5.0,
-        status: 'active',
+        bookings: 0, revenue: 0, occupancy: 0, rating: 5.0, status: 'active',
         bedrooms: parseInt(document.getElementById('propBedrooms').value)
-      };
-      properties.push(newProp);
+      });
       renderProperties();
       closeModal('addProperty');
       this.reset();
-      alert('Property added successfully! 🎉');
+      alert('Property added! 🎉');
     });
 
     document.getElementById('newBookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const propertyId = parseInt(document.getElementById('bookingProperty').value);
-      const prop = properties.find(p => p.id === propertyId);
-      const checkIn = new Date(document.getElementById('checkIn').value);
-      const checkOut = new Date(document.getElementById('checkOut').value);
-      const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-      const total = nights * prop.price;
-      
-      const newBooking = {
+      const prop = properties.find(p => p.id === parseInt(document.getElementById('bookingProperty').value));
+      const nights = Math.ceil((new Date(document.getElementById('checkOut').value) - new Date(document.getElementById('checkIn').value)) / (1000*60*60*24));
+      bookings.push({
         id: Date.now(),
         guest: document.getElementById('guestName').value,
-        propertyId: propertyId,
+        propertyId: parseInt(document.getElementById('bookingProperty').value),
         checkIn: document.getElementById('checkIn').value,
         checkOut: document.getElementById('checkOut').value,
-        total: total,
+        total: nights * prop.price,
         status: 'confirmed'
-      };
-      bookings.push(newBooking);
+      });
       renderBookings();
       closeModal('newBooking');
       this.reset();
-      alert(`Booking created! Total: $${total}`);
     });
 
-    // Quick actions
     function updatePrices() {
-      properties.forEach(p => {
-        p.price = Math.round(p.price * (1 + (Math.random() * 0.2 - 0.1)));
-      });
+      properties.forEach(p => { p.price = Math.round(p.price * (1 + (Math.random() * 0.2 - 0.1))); });
       renderProperties();
-      alert('Prices updated! 🔄');
+      alert('Prices updated!');
     }
 
-    function syncCalendars() {
-      alert('Syncing with AirBnB, Booking.com, VRBO... ✅');
-    }
-
-    function deleteProperty(id) {
-      if (confirm('Are you sure you want to delete this property?')) {
-        properties = properties.filter(p => p.id !== id);
-        renderProperties();
-      }
-    }
-
-    // Stripe payment
-    function processStripePayment() {
-      const stripe = Stripe('pk_test_YOUR_STRIPE_KEY');
-      alert('Stripe Checkout would open here!\n\nTo enable:\n1. Get keys from stripe.com\n2. Replace pk_test_YOUR_STRIPE_KEY');
-    }
-
-    // Initialize
-    renderProperties();
-    renderBookings();
-    renderAutomation();
+    function syncCalendars() { alert('Syncing with AirBnB, Booking.com, VRBO...'); }
+    function deleteProperty(id) { if(confirm('Delete property?')) { properties = properties.filter(p => p.id !== id); renderProperties(); } }
+    function subscribe(plan) { alert(plan.toUpperCase() + ' plan - $' + (plan==='starter'?49:plan==='growth'?99:249) + '/month\n\nAdd Stripe keys to enable!'); }
+    function processStripePayment() { alert('Stripe Checkout would open here!\n\nGet keys from stripe.com'); }
   </script>
 </body>
 </html>
