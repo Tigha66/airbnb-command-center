@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AirBnB Command Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+  </style>
+</head>
+<body class="bg-[#0a0a0f] min-h-screen text-white flex items-center justify-center">
+  <div class="w-full max-w-md p-8">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-home text-3xl"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-white">AirBnB Command</h1>
+      <p class="text-slate-400 mt-2">Automated Property Management</p>
+    </div>
+    <div class="glass rounded-2xl p-8">
+      <form id="loginForm" class="space-y-4">
+        <input type="email" id="email" placeholder="Email" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-slate-500">
+        <input type="password" id="password" placeholder="Password" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-slate-500">
+        <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl font-semibold">Sign In</button>
+      </form>
+    </div>
+    <div class="mt-8">
+      <h3 class="text-center text-slate-400 mb-4">Pricing Plans</h3>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="glass rounded-xl p-4 text-center">
+          <p class="font-bold text-sm">Starter</p>
+          <p class="text-xl font-bold text-slate-400">$49</p>
+          <p class="text-xs text-slate-500">3 properties</p>
+          <button onclick="subscribe('starter')" class="w-full mt-3 py-2 bg-slate-600 rounded-lg text-xs">Select</button>
+        </div>
+        <div class="glass rounded-xl p-4 text-center border border-red-500/50">
+          <p class="font-bold text-sm">Growth</p>
+          <p class="text-xl font-bold text-red-400">$99</p>
+          <p class="text-xs text-slate-500">10 properties</p>
+          <button onclick="subscribe('growth')" class="w-full mt-3 py-2 bg-red-500 rounded-lg text-xs">Select</button>
+        </div>
+        <div class="glass rounded-xl p-4 text-center border border-purple-500/50">
+          <p class="font-bold text-sm">Enterprise</p>
+          <p class="text-xl font-bold text-purple-400">$249</p>
+          <p class="text-xs text-slate-500">Unlimited</p>
+          <button onclick="subscribe('enterprise')" class="w-full mt-3 py-2 bg-purple-500 rounded-lg text-xs">Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const stripe = Stripe('pk_test_YOUR_STRIPE_KEY');
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      localStorage.setItem('isLoggedIn', 'true');
+      window.location.href = 'index.html';
+    });
+    function subscribe(plan) {
+      const prices = { starter: 4900, growth: 9900, enterprise: 24900 };
+      alert('Stripe Checkout: ' + plan.toUpperCase() + ' - $' + (prices[plan]/100) + '/month\n\nTo enable payments, add your Stripe keys!');
+    }
+  </script>
+</body>
+</html>

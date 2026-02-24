@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirBnB Command Center - Automated Property Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+    .gradient-text{background:linear-gradient(135deg,#ff5a5f,#ff385c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  </style>
+</head>
+<body class="bg-[#0a0a0f] min-h-screen text-white">
+  <!-- Header -->
+  <header class="glass sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
+          <i class="fas fa-home text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold gradient-text">AirBnB Command Center</h1>
+          <p class="text-xs text-slate-400">Automated Property Management</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-2 text-green-400 text-sm"><span class="w-2 h-2 bg-green-400 rounded-full pulse"></span> AI Active</span>
+        <button class="px-4 py-2 bg-red-500 rounded-xl font-medium"><i class="fas fa-plus mr-2"></i>Add Property</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-5 gap-4 mb-8">
+      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Properties</p><p class="text-3xl font-bold">12</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Active Bookings</p><p class="text-3xl font-bold text-green-400">8</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Revenue (Month)</p><p class="text-3xl font-bold">$24,500</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Reviews</p><p class="text-3xl font-bold text-yellow-400">4.9★</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-slate-400 text-sm">Occupancy</p><p class="text-3xl font-bold text-purple-400">87%</p></div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Bookings -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-calendar-check text-red-400"></i> Upcoming Check-ins</h2>
+        <div class="space-y-3">
+          <div class="bg-white/5 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold">JD</div>
+                <div><p class="font-medium">John Davis</p><p class="text-slate-400 text-xs">Villa Sunset • 3 nights</p></div>
+              </div>
+              <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs">Confirmed</span>
+            </div>
+            <p class="text-slate-400 text-sm">📅 Mar 15-18 • $850</p>
+            <div class="flex gap-2 mt-2">
+              <button class="flex-1 py-2 bg-red-500/20 text-red-400 rounded-lg text-xs"><i class="fas fa-envelope mr-1"></i>Message</button>
+              <button class="flex-1 py-2 bg-green-500/20 text-green-400 rounded-lg text-xs"><i class="fas fa-key mr-1"></i>Send Code</button>
+            </div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center font-bold">SM</div>
+                <div><p class="font-medium">Sarah Miller</p><p class="text-slate-400 text-xs">Cozy Apartment • 5 nights</p></div>
+              </div>
+              <span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs">Pending</span>
+            </div>
+            <p class="text-slate-400 text-sm">📅 Mar 20-25 • $1,200</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Automation Tasks -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-robot text-purple-400"></i> Automation Queue</h2>
+        <div class="space-y-3">
+          <div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><i class="fas fa-envelope text-green-400 text-xs"></i></div>
+            <div class="flex-1"><p class="text-sm">Welcome message sent</p><p class="text-slate-500 text-xs">to John Davis</p></div>
+            <span class="text-green-400 text-xs">✓</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><i class="fas fa-bell text-green-400 text-xs"></i></div>
+            <div class="flex-1"><p class="text-sm">Checkout reminder</p><p class="text-slate-500 text-xs">Scheduled for tomorrow</p></div>
+            <span class="text-yellow-400 text-xs">⏳</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><i class="fas fa-cleaning text-blue-400 text-xs"></i></div>
+            <div class="flex-1"><p class="text-sm">Cleaning scheduled</p><p class="text-slate-500 text-xs">Villa Sunset • Mar 18</p></div>
+            <span class="text-green-400 text-xs">✓</span>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><i class="fas fa-star text-purple-400 text-xs"></i></div>
+            <div class="flex-1"><p class="text-sm">Review request</p><p class="text-slate-500 text-xs">Sent to previous guest</p></div>
+            <span class="text-green-400 text-xs">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-yellow-400"></i> Quick Actions</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-plus-circle text-green-400 mb-2"></i>
+            <p class="font-medium">New Booking</p>
+            <p class="text-slate-400 text-xs">Add manually</p>
+          </button>
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-envelope-open text-blue-400 mb-2"></i>
+            <p class="font-medium">Message All</p>
+            <p class="text-slate-400 text-xs">Broadcast</p>
+          </button>
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-dollar-sign text-yellow-400 mb-2"></i>
+            <p class="font-medium">Update Prices</p>
+            <p class="text-slate-400 text-xs">Dynamic pricing</p>
+          </button>
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-sync text-purple-400 mb-2"></i>
+            <p class="font-medium">Sync Calendars</p>
+            <p class="text-slate-400 text-xs">All platforms</p>
+          </button>
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-file-invoice text-red-400 mb-2"></i>
+            <p class="font-medium">Generate Invoice</p>
+            <p class="text-slate-400 text-xs">Auto-billing</p>
+          </button>
+          <button class="bg-white/5 hover:bg-white/10 rounded-xl p-4 text-left transition">
+            <i class="fas fa-headset text-cyan-400 mb-2"></i>
+            <p class="font-medium">Support</p>
+            <p class="text-slate-400 text-xs">AI assistant</p>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="glass rounded-2xl p-6 mt-8">
+      <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fas fa-building text-indigo-400"></i> Properties</h2>
+      <table class="w-full">
+        <thead>
+          <tr class="text-left text-slate-400 text-sm border-b border-white/10">
+            <th class="pb-3">Property</th>
+            <th class="pb-3">Bookings</th>
+            <th class="pb-3">Revenue</th>
+            <th class="pb-3">Occupancy</th>
+            <th class="pb-3">Rating</th>
+            <th class="pb-3">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-white/5">
+            <td class="py-3"><p class="font-medium">Villa Sunset</p><p class="text-slate-400 text-xs">Miami Beach, FL</p></td>
+            <td>12</td>
+            <td>$18,500</td>
+            <td><span class="text-green-400">92%</span></td>
+            <td>4.9★</td>
+            <td><span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs">Active</span></td>
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="py-3"><p class="font-medium">Cozy Apartment</p><p class="text-slate-400 text-xs">New York, NY</p></td>
+            <td>8</td>
+            <td>$12,400</td>
+            <td><span class="text-green-400">78%</span></td>
+            <td>4.7★</td>
+            <td><span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs">Active</span></td>
+          </tr>
+          <tr>
+            <td class="py-3"><p class="font-medium">Mountain Cabin</p><p class="text-slate-400 text-xs">Denver, CO</p></td>
+            <td>5</td>
+            <td>$8,200</td>
+            <td><span class="text-yellow-400">65%</span></td>
+            <td>4.8★</td>
+            <td><span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs">Maintenance</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>
