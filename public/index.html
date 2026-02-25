@@ -63,6 +63,23 @@
       <i class="fas fa-phone-slash"></i> End Call
     </button>
 
+    <!-- Language Selection -->
+    <div class="mb-4">
+      <p class="text-xs text-slate-500 mb-2">🌐 Language</p>
+      <select id="languageSelect" onchange="changeLanguage()" class="w-full bg-white/5 rounded-lg p-2 text-sm">
+        <option value="en">🇺🇸 English</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="pt">🇧🇷 Português</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="ar">🇸🇦 العربية</option>
+      </select>
+    </div>
+
     <div class="mt-4 pt-4 border-t border-white/10">
       <p class="text-xs text-slate-500 mb-2">Voice</p>
       <select id="voiceSelect" onchange="changeVoice()" class="w-full bg-white/5 rounded-lg p-2 text-sm">
@@ -222,22 +239,20 @@
     function useBrowserVoice() { localStorage.removeItem('elevenApiKey'); apiKey = ''; useElevenLabs = false; document.getElementById('elevenLabsSetup').classList.add('hidden'); }
     function changeVoice() { selectedVoice = document.getElementById('voiceSelect').value; localStorage.setItem('elevenVoice', selectedVoice); }
 
-    const supportResponses = {
-      'checkin': "Your check-in time is 3 PM. The address will be sent 24 hours before arrival.",
-      'checkout': "Checkout is at 11 AM. Please leave the keys in the lockbox.",
-      'wifi': "The WiFi password is on the welcome card in the kitchen. It's vacation2024.",
-      'password': "The WiFi password is on the welcome card in the kitchen. It's vacation2024.",
-      'parking': "Free parking is available. The gate code is 1234.",
-      'pool': "The pool is open from 6 AM to 10 PM. Towels are in the hallway.",
-      'ac': "The air conditioning is controlled by the wall thermostat. Set it to your preferred temperature.",
-      'lock': "If you're locked out, call this number and we'll send help immediately.",
-      'key': "The key is in the smart lock. Use the code I sent to your phone.",
-      'problem': "I'm sorry to hear that. I'm alerting the property manager right away.",
-      'emergency': "For emergencies, please dial 911. For other issues, I'm here to help.",
-      'help': "I can help with check-in, checkout, WiFi, parking, pool, and more. What do you need?",
-      'thank': "You're welcome! Anything else I can help with?",
-      'bye': "Thank you for calling! Enjoy your stay!",
+    // Multi-language responses
+    const responses = {
+      en: { welcome: "Hello! Welcome to AirBnB support. How can I help?", checkin: "Check-in is 3 PM. Address sent 24h before.", checkout: "Checkout at 11 AM. Leave keys in lockbox.", wifi: "WiFi password is vacation2024.", parking: "Free parking. Gate code 1234.", pool: "Pool 6 AM-10 PM. Towels in hallway.", ac: "AC controlled by wall thermostat.", lock: "Locked out? Call and we'll help.", key: "Key in smart lock. Use code sent to your phone.", problem: "Sorry to hear that. Alerting manager now.", emergency: "Call 911 for emergencies.", help: "I help with check-in, WiFi, parking, pool and more.", thank: "You're welcome!", bye: "Thank you! Enjoy your stay!" },
+      es: { welcome: "¡Hola! Bienvenido al soporte AirBnB. ¿Cómo puedo ayudarte?", checkin: "Entrada 3 PM. Dirección 24h antes.", checkout: "Salida 11 AM. Llaves en caja fuerte.", wifi: "Contraseña WiFi: vacation2024.", parking: "Estacionamiento gratuito. Código 1234.", pool: "Piscina 6 AM-10 PM. Toallas en pasillo.", ac: "Aire por termostato.", lock: "¿Encerrado? Llamanos.", key: "Llave en cerradura inteligente.", problem: "Lo siento. Alertando al gerente.", emergency: "Llama 911 para emergencias.", help: "Ayudo con check-in, WiFi, piscina y más.", thank: "¡De nada!", bye: "¡Gracias! ¡Disfruta!" },
+      fr: { welcome: "Bonjour! Bienvenue au support AirBnB. Comment puis-je aider?", checkin: "Enregistrement 15h. Adresse 24h avant.", checkout: "Départ 11h. Clés dans le coffre.", wifi: "WiFi: vacation2024.", parking: "Parking gratuit. Code 1234.", pool: "Piscine 6h-22h. Serviettes couloir.", ac: "Climatisation par thermostat.", lock: "Verrouillé? Appelez.", key: "Clé dans serrure intelligente.", problem: "Désolé. J'alerte le gérant.", emergency: "Appelez 911 pour urgences.", help: "Aide check-in, WiFi, piscine et plus.", thank: "De rien!", bye: "Merci! Bonne séjour!" },
+      de: { welcome: "Hallo! Willkommen bei AirBnB Support. Wie kann ich helfen?", checkin: "Check-in 15 Uhr. Adresse 24h vorher.", checkout: "Check-out 11 Uhr. Schlüssel im Safe.", wifi: "WLAN: vacation2024.", parking: "Kostenlos parken. Code 1234.", pool: "Pool 6-22 Uhr. Handtücher Flur.", ac: "Klimaanlage am Thermostat.", lock: "Ausgesperrt? Anrufen.", key: "Schlüssel im Smart Lock.", problem: "Entschuldigung. Benachrichtige Manager.", emergency: "Notruf 911.", help: "Hilfe bei Check-in, WLAN, Pool.", thank: "Bitte!", bye: "Danke! Viel Spaß!" },
+      zh: { welcome: "你好！AirBnB支持中心。有什么可以帮助？", checkin: "入住下午3点。地址24小时前发送。", checkout: "退房上午11点。钥匙放保险箱。", wifi: "WiFi密码: vacation2024。", parking: "免费停车。门禁码1234。", pool: "泳池早6点至晚10点。毛巾在走廊。", ac: "空调由恒温器控制。", lock: "锁外面了？请打电话。", key: "钥匙在智能锁里。", problem: "抱歉。立即通知经理。", emergency: "紧急情况拨打911。", help: "帮助入住、WiFi、泳池等。", thank: "不客气！", bye: "谢谢！祝您愉快！" }
     };
+
+    let selectedLang = localStorage.getItem('selectedLang') || 'en';
+    document.getElementById('languageSelect').value = selectedLang;
+
+    function getResponse(key) { return responses[selectedLang]?.[key] || responses.en[key]; }
+    function changeLanguage() { selectedLang = document.getElementById('languageSelect').value; localStorage.setItem('selectedLang', selectedLang); }
 
     function openSupport() { document.getElementById('voicePanel').classList.remove('hidden'); }
     function closeSupport() { document.getElementById('voicePanel').classList.add('hidden'); }
@@ -262,19 +277,22 @@
       document.getElementById('voiceText').textContent = 'Listening...';
       document.getElementById('callBtn').classList.add('hidden');
       document.getElementById('endBtn').classList.remove('hidden');
-      speak("Hello! Welcome to AirBnB support. How can I help you today?");
+      speak(getResponse('welcome'));
       
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.continuous = true;
+        const langs = {en:'en-US',es:'es-ES',fr:'fr-FR',de:'de-DE',it:'it-IT',pt:'pt-BR',zh:'zh-CN'};
+        recognition.lang = langs[selectedLang] || 'en-US';
         recognition.onresult = (e) => { if (e.results[0].isFinal) handleVoiceInput(e.results[0][0].transcript.toLowerCase()); };
         recognition.start();
       }
     }
 
     function handleVoiceInput(input) {
-      let response = "I'm not sure I understood. Can you try again?";
-      for (const [key, value] of Object.entries(supportResponses)) { if (input.includes(key)) { response = value; break; } }
+      let response = getResponse('help');
+      const keys = ['checkin','checkout','wifi','password','parking','pool','ac','lock','key','problem','emergency','help','thank','bye'];
+      for (const key of keys) { if (input.includes(key)) { response = getResponse(key); break; } }
       speak(response);
     }
 
@@ -285,7 +303,7 @@
       document.getElementById('voiceText').textContent = 'Click to call support';
       document.getElementById('callBtn').classList.remove('hidden');
       document.getElementById('endBtn').classList.add('hidden');
-      speak("Thank you! Have a great day!");
+      speak(getResponse('bye'));
     }
 
     // Manager Data
